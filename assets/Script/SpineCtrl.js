@@ -156,7 +156,7 @@ cc.Class({
             cc.find('Canvas').addChild(newNode);
             newNode.addComponent(sp.Skeleton);
             let _skeleton = newNode.getComponent(sp.Skeleton);
-            this.loadSpine(this.heroArr[0].resUrl,_skeleton,'walk');
+            this.loadSpine(this.heroArr[0].resUrl,_skeleton,this.heroArr[0].defaultAnima);
         }
     },
 
