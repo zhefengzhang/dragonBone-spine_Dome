@@ -109,25 +109,62 @@ cc.Class({
     },
 
     start () {
-        this.skeleton = this.node.getComponent(sp.Skeleton);
+        this.skeleton = this.node.getComponent(sp.Skeleton);        
+        this.initData();
     },
 
-    test1 () {
+    initData () {
+        this.heroArr = [
+            {
+                resUrl: 'spineRaptor/raptor',
+                defaultAnima: 'walk'
+            },
+            {
+                resUrl: 'spineboy/spineboy',
+                defaultAnima: 'walk'
+            },
+            {
+                resUrl: 'spineRaptor/test_guai_001',
+                defaultAnima: 'walk_zhanli'
+            }
+        ];
+        this.defaultIndex = 0;
+    },
+
+    onChangeGunEvent () {
         //--测试查找对应插槽中的图片然后替换
         var gun = this.skeleton.findSlot('gun');
         var head = this.skeleton.findSlot('head');
         var headAtta = head.attachment;
         gun.setAttachment(headAtta);
-
     },
 
-    test2 () {
-        //--cc.loader.loadRes
-        var self = this;
-        cc.loader.loadRes('spineRaptor/raptor', sp.SkeletonData ,function (err, sp) {
-            self.skeleton.skeletonData = sp;
-            self.skeleton._updateSkeletonData();
-        });
-    }
+    onChangeHeroEvent () {
+        if ( this.defaultIndex> (this.heroArr.length -1)) this.defaultIndex = 0;
+        this.loadSpine(this.heroArr[this.defaultIndex].resUrl,this.skeleton, this.heroArr[this.defaultIndex].defaultAnima);
+        this.defaultIndex++;
+    },
 
+    onAddHeroEvent () {
+        if (cc.find('Canvas/newHero')) {
+            cc.find('Canvas/newHero').destroy();
+        }
+        else {
+            let newNode = new cc.Node();
+            newNode.name = 'newHero';
+            newNode.setPosition(this.node.x,this.node.y);
+            cc.find('Canvas').addChild(newNode);
+            newNode.addComponent(sp.Skeleton);
+            let _skeleton = newNode.getComponent(sp.Skeleton);
+            this.loadSpine(this.heroArr[0].resUrl,_skeleton,'walk');
+        }
+    },
+
+    loadSpine (resUrl,skeleton,anima) {
+        cc.loader.loadRes(resUrl, sp.SkeletonData, function (err, sp) {
+            skeleton.skeletonData = sp;
+            skeleton.animation = anima;
+            skeleton._updateSkeletonData();
+        }.bind(this));
+    },
 });
