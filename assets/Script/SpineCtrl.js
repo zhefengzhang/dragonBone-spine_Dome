@@ -167,4 +167,36 @@ cc.Class({
             skeleton._updateSkeletonData();
         }.bind(this));
     },
+
+    onLoadSpine () {
+        if (cc.find('Canvas/newSpine')) {
+            cc.find('Canvas/newSpine').destroy();
+        }
+        else {
+            var spineNode = new cc.Node();
+            spineNode.name = 'newSpine';
+            spineNode.setPosition(49,-237);
+            var skeleton = spineNode.addComponent(sp.Skeleton);
+            cc.find("Canvas").addChild(spineNode);
+            //TODO : 此处为你的远程资源路径
+            var image = "http://127.0.0.1:5500/assets/resources/spineRaptor/raptor.png";
+            var ske = "http://127.0.0.1:5500/assets/resources/spineRaptor/raptor.json";
+            var atlas = "http://127.0.0.1:5500/assets/resources/spineRaptor/raptor.atlas";
+            cc.loader.load(image, (error, texture) => {
+                cc.loader.load({ url: atlas, type: 'txt' }, (error, atlasJson) => {
+                    cc.loader.load({ url: ske, type: 'txt' }, (error, spineJson) => {
+     
+                        var asset = new sp.SkeletonData();
+                        asset.skeletonJson = spineJson;
+                        asset.atlasText = atlasJson;
+                        asset.textures = [texture];
+                        asset.textureNames = ['raptor.png'];
+                        skeleton.skeletonData = asset;
+                        skeleton.animation = 'walk';
+                        skeleton._updateSkeletonData();
+                    });
+                });
+            });
+        }
+    }
 });
