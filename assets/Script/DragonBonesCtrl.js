@@ -504,11 +504,12 @@ if (!cc.runtime) {
         },
 
         onLoadDragonBone () {
-            if (cc.find('Canvas/newDragonbones')) {
-                cc.find('Canvas/newDragonbones').destroy();
+            if (cc.find('Canvas/animNode')) {
+                cc.find('Canvas/animNode').destroy();
             }
             else {
                 var animNode = new cc.Node();
+                animNode.name = 'animNode';
                 animNode.parent = cc.find('Canvas');
                 var dragonDisplay = animNode.addComponent(dragonBones.ArmatureDisplay);
 
