@@ -41,8 +41,8 @@
     },
     "_scale": {
       "__type__": "cc.Vec3",
-      "x": 0.19895833333333332,
-      "y": 0.19895833333333332,
+      "x": 0.8891743473824731,
+      "y": 0.8891743473824731,
       "z": 1
     },
     "_quat": {
@@ -94,7 +94,7 @@
     "_level": 0,
     "_components": [
       {
-        "__id__": 56
+        "__id__": 57
       }
     ],
     "_prefab": null,
@@ -2332,7 +2332,7 @@
   },
   {
     "__type__": "cc.Node",
-    "_name": "New Button",
+    "_name": "loaddrab",
     "_objFlags": 0,
     "_parent": {
       "__id__": 2
@@ -2350,6 +2350,9 @@
       },
       {
         "__id__": 54
+      },
+      {
+        "__id__": 56
       }
     ],
     "_prefab": null,
@@ -2363,7 +2366,7 @@
     },
     "_contentSize": {
       "__type__": "cc.Size",
-      "width": 100,
+      "width": 170,
       "height": 40
     },
     "_anchorPoint": {
@@ -2373,8 +2376,8 @@
     },
     "_position": {
       "__type__": "cc.Vec3",
-      "x": 141,
-      "y": -276,
+      "x": 39,
+      "y": -275,
       "z": 0
     },
     "_scale": {
@@ -2424,7 +2427,7 @@
     },
     "_contentSize": {
       "__type__": "cc.Size",
-      "width": 100,
+      "width": 170,
       "height": 40
     },
     "_anchorPoint": {
@@ -2470,8 +2473,8 @@
     "_srcBlendFactor": 1,
     "_dstBlendFactor": 771,
     "_useOriginalSize": false,
-    "_string": "button",
-    "_N$string": "button",
+    "_string": "加载远程龙骨资源",
+    "_N$string": "加载远程龙骨资源",
     "_fontSize": 20,
     "_lineHeight": 40,
     "_enableWrapText": false,
@@ -2589,6 +2592,33 @@
     "component": "DragonBonesCtrl",
     "handler": "onLoadDragonBone",
     "customEventData": ""
+  },
+  {
+    "__type__": "cc.Widget",
+    "_name": "",
+    "_objFlags": 0,
+    "node": {
+      "__id__": 50
+    },
+    "_enabled": true,
+    "alignMode": 1,
+    "_target": null,
+    "_alignFlags": 4,
+    "_left": 0,
+    "_right": 0.37083333333333335,
+    "_top": 0,
+    "_bottom": 0.03906250000000004,
+    "_verticalCenter": 0,
+    "_horizontalCenter": 0,
+    "_isAbsLeft": true,
+    "_isAbsRight": false,
+    "_isAbsTop": true,
+    "_isAbsBottom": false,
+    "_isAbsHorizontalCenter": true,
+    "_isAbsVerticalCenter": true,
+    "_originalWidth": 0,
+    "_originalHeight": 0,
+    "_id": "80rWyhbzxHQaicBnH/kJGk"
   },
   {
     "__type__": "cc.Canvas",
