@@ -501,6 +501,39 @@ if (!cc.runtime) {
     
             this._attackState.autoFadeOutTime = this._attackState.fadeTotalTime;
             this._attackState.addBoneMask("pelvis");
+        },
+
+        onLoadDragonBone () {
+            if (cc.find('Canvas/newDragonbones')) {
+                cc.find('Canvas/newDragonbones').destroy();
+            }
+            else {
+                var animNode = new cc.Node();
+                animNode.parent = cc.find('Canvas');
+                var dragonDisplay = animNode.addComponent(dragonBones.ArmatureDisplay);
+
+                var image = 'http://127.0.0.1:5500/assets/resources/Monster/monsterbone001_0_tex.png';
+                var ske = 'http://127.0.0.1:5500/assets/resources/Monster/monsterbone001_0_ske.json';
+                var atlas = 'http://127.0.0.1:5500/assets/resources/Monster/monsterbone001_0_tex.json';
+                cc.loader.load(image, (error, texture) => {
+                    cc.loader.load({ url: atlas, type: 'txt' }, (error, atlasJson) => {
+                        cc.loader.load({ url: ske, type: 'txt' }, (error, dragonBonesJson) => {
+                            var atlas = new dragonBones.DragonBonesAtlasAsset();
+                            atlas.atlasJson = atlasJson;
+                            atlas.texture = texture;
+
+                            var asset = new dragonBones.DragonBonesAsset();
+                            asset.dragonBonesJson = dragonBonesJson;
+
+                            dragonDisplay.dragonAtlasAsset = atlas;
+                            dragonDisplay.dragonAsset = asset;
+
+                            dragonDisplay.armatureName = 'armatureName';
+                            dragonDisplay.playAnimation('walk', 0);
+                        });
+                    });
+                });
+            }
         }
     });
     
@@ -574,7 +607,7 @@ if (!cc.runtime) {
             if (this._effect) {
                 this._effect.node.removeFromParent();
             }
-        }
+        },
     });
     } // end of !cc.runtime
     
