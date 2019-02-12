@@ -17,16 +17,15 @@ cc.Class({
 
     // LIFE-CYCLE CALLBACKS:
 
-    changeBtnClicked () {
-        var self = this;
+    changeBtnClicked() {
         var data = this.test.armature().clock;
-        cc.loader.loadResDir('Monster/monsterbone001_0_ske', function(err, res){
+        cc.loader.loadRes('Monster/monsterbone001_0_ske', dragonBones.DragonBonesAsset, (err, res) => {
 
-            cc.loader.loadResDir('Monster/monsterbone001_0_tex', function(err2, res2){
+            cc.loader.loadRes('Monster/monsterbone001_0_tex', dragonBones.DragonBonesAtlasAsset, (err2, res2) => {
 
-                self.test.dragonAsset = res[0];
-                self.test.dragonAtlasAsset = res2[2];
-                self.test.armature().clock = data;
+                this.test.dragonAsset = res;
+                this.test.dragonAtlasAsset = res2;
+                this.test.armature().clock = data;
             })
         })
     }

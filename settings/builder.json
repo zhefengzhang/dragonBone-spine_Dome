@@ -13,7 +13,7 @@
   "excludeScenes": [
     "fdc85b83-efd8-4647-be75-697b0b616e0a",
     "cd67e9f0-cc2c-4fa5-a366-13e7bd5bc121",
-    "07fee117-cb9e-4ac1-b846-511fb1484ca4"
+    "582767b7-f1b9-498a-94a4-836c11ff448a"
   ],
   "fb-instant-games": {},
   "includeAnySDK": false,
@@ -38,7 +38,7 @@
     "orientation": "portrait",
     "zip": false
   },
-  "startScene": "582767b7-f1b9-498a-94a4-836c11ff448a",
+  "startScene": "07fee117-cb9e-4ac1-b846-511fb1484ca4",
   "title": "dragonBone-spine_Dome",
   "webOrientation": "auto",
   "wechatgame": {
