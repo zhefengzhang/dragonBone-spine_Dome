@@ -8,12 +8,12 @@ cc.Class({
         mixTime: 0.2
     },
 
-    onLoad () {
+    onLoad() {
         var spine = this.spine = this.getComponent('sp.Skeleton');
         this._setMix('walk', 'run');
         this._setMix('run', 'jump');
         this._setMix('walk', 'jump');
-        
+
         spine.setStartListener(trackEntry => {
             var animationName = trackEntry.animation ? trackEntry.animation.name : "";
             cc.log("[track %s][animation %s] start.", trackEntry.trackIndex, animationName);
@@ -43,27 +43,17 @@ cc.Class({
         });
 
         this._hasStop = false;
-
-        // var self = this;
-        // cc.eventManager.addListener({
-        //     event: cc.EventListener.TOUCH_ALL_AT_ONCE,
-        //     onTouchesBegan () {
-        //         self.toggleTimeScale();
-        //     }
-        // }, this.node);
     },
-    
-    // OPTIONS
-    
-    toggleDebugSlots () {
+
+    toggleDebugSlots() {
         this.spine.debugSlots = !this.spine.debugSlots;
     },
-    
-    toggleDebugBones () {
+
+    toggleDebugBones() {
         this.spine.debugBones = !this.spine.debugBones;
     },
-    
-    toggleTimeScale () {
+
+    toggleTimeScale() {
         if (this.spine.timeScale === 1.0) {
             this.spine.timeScale = 0.3;
         }
@@ -71,49 +61,47 @@ cc.Class({
             this.spine.timeScale = 1.0;
         }
     },
-    
-    // ANIMATIONS
-    
-    stop () {
+
+    stop() {
         this.spine.clearTrack(0);
         this._hasStop = true;
     },
 
-    walk () {
+    walk() {
         this.spine.setAnimation(0, 'walk', true);
         this._hasStop = false;
     },
-    
-    run () {
+
+    run() {
         this.spine.setAnimation(0, 'run', true);
         this._hasStop = false;
     },
-    
-    jump () {
+
+    jump() {
         var oldAnim = this.spine.animation;
         this.spine.setAnimation(0, 'jump', false);
         if (oldAnim && !this._hasStop) {
             this.spine.addAnimation(0, oldAnim === 'run' ? 'run' : 'walk', true, 0);
         }
     },
-    
-    shoot () {
+
+    shoot() {
         this.spine.setAnimation(1, 'shoot', false);
     },
-    
+
     //
-    
-    _setMix (anim1, anim2) {
+
+    _setMix(anim1, anim2) {
         this.spine.setMix(anim1, anim2, this.mixTime);
         this.spine.setMix(anim2, anim1, this.mixTime);
     },
 
-    start () {
-        this.skeleton = this.node.getComponent(sp.Skeleton);        
+    start() {
+        this.skeleton = this.node.getComponent(sp.Skeleton);
         this.initData();
     },
 
-    initData () {
+    initData() {
         this.heroArr = [
             {
                 resUrl: 'spineRaptor/raptor',
@@ -131,7 +119,7 @@ cc.Class({
         this.defaultIndex = 0;
     },
 
-    onChangeGunEvent () {
+    onChangeGunEvent() {
         //--测试查找对应插槽中的图片然后替换
         var gun = this.skeleton.findSlot('gun');
         var head = this.skeleton.findSlot('head');
@@ -139,28 +127,28 @@ cc.Class({
         gun.setAttachment(headAtta);
     },
 
-    onChangeHeroEvent () {
-        if ( this.defaultIndex> (this.heroArr.length -1)) this.defaultIndex = 0;
-        this.loadSpine(this.heroArr[this.defaultIndex].resUrl,this.skeleton, this.heroArr[this.defaultIndex].defaultAnima);
+    onChangeHeroEvent() {
+        if (this.defaultIndex > (this.heroArr.length - 1)) this.defaultIndex = 0;
+        this.loadSpine(this.heroArr[this.defaultIndex].resUrl, this.skeleton, this.heroArr[this.defaultIndex].defaultAnima);
         this.defaultIndex++;
     },
 
-    onAddHeroEvent () {
+    onAddHeroEvent() {
         if (cc.find('Canvas/newHero')) {
             cc.find('Canvas/newHero').destroy();
         }
         else {
             let newNode = new cc.Node();
             newNode.name = 'newHero';
-            newNode.setPosition(this.node.x,this.node.y);
+            newNode.setPosition(this.node.x, this.node.y);
             cc.find('Canvas').addChild(newNode);
             newNode.addComponent(sp.Skeleton);
             let _skeleton = newNode.getComponent(sp.Skeleton);
-            this.loadSpine(this.heroArr[0].resUrl,_skeleton,this.heroArr[0].defaultAnima);
+            this.loadSpine(this.heroArr[0].resUrl, _skeleton, this.heroArr[0].defaultAnima);
         }
     },
 
-    loadSpine (resUrl,skeleton,anima) {
+    loadSpine(resUrl, skeleton, anima) {
         cc.loader.loadRes(resUrl, sp.SkeletonData, function (err, sp) {
             skeleton.skeletonData = sp;
             skeleton.animation = anima;
@@ -168,25 +156,26 @@ cc.Class({
         }.bind(this));
     },
 
-    onLoadSpine () {
+    onLoadSpine() {
         if (cc.find('Canvas/newSpine')) {
             cc.find('Canvas/newSpine').destroy();
         }
         else {
             var spineNode = new cc.Node();
             spineNode.name = 'newSpine';
-            spineNode.setPosition(49,-237);
+            spineNode.setPosition(49, -237);
             var skeleton = spineNode.addComponent(sp.Skeleton);
             cc.find("Canvas").addChild(spineNode);
             //TODO : 此处为你的远程资源路径
-            var image = "http://127.0.0.1:5500/assets/resources/spineRaptor/raptor.png";
-            var ske = "http://127.0.0.1:5500/assets/resources/spineRaptor/raptor.json";
-            var atlas = "http://127.0.0.1:5500/assets/resources/spineRaptor/raptor.atlas";
-            cc.loader.load(image, (error, texture) => {
-                cc.loader.load({ url: atlas, type: 'txt' }, (error, atlasJson) => {
-                    cc.loader.load({ url: ske, type: 'txt' }, (error, spineJson) => {
-     
+            var imageUrl = "http://127.0.0.1:5500/assets/resources/spineRaptor/raptor.png";
+            var skeUrl = "http://127.0.0.1:5500/assets/resources/spineRaptor/raptor.json";
+            var atlasUrl = "http://127.0.0.1:5500/assets/resources/spineRaptor/raptor.atlas";
+            cc.loader.load(imageUrl, (error, texture) => {
+                cc.loader.load({ url: atlasUrl, type: 'txt' }, (error, atlasJson) => {
+                    cc.loader.load({ url: skeUrl, type: 'txt' }, (error, spineJson) => {
+
                         var asset = new sp.SkeletonData();
+                        asset._uuid = skeUrl;
                         asset.skeletonJson = spineJson;
                         asset.atlasText = atlasJson;
                         asset.textures = [texture];

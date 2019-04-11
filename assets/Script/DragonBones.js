@@ -12,20 +12,20 @@ cc.Class({
     extends: cc.Component,
 
     properties: {
-        test: dragonBones.ArmatureDisplay,
+        testDB: dragonBones.ArmatureDisplay,
     },
 
     // LIFE-CYCLE CALLBACKS:
 
     changeBtnClicked() {
-        var data = this.test.armature().clock;
         cc.loader.loadRes('Monster/monsterbone001_0_ske', dragonBones.DragonBonesAsset, (err, res) => {
 
             cc.loader.loadRes('Monster/monsterbone001_0_tex', dragonBones.DragonBonesAtlasAsset, (err2, res2) => {
 
-                this.test.dragonAsset = res;
-                this.test.dragonAtlasAsset = res2;
-                this.test.armature().clock = data;
+                this.testDB.dragonAsset = res;
+                this.testDB.dragonAtlasAsset = res2;
+                this.testDB.armatureName = "armatureName";
+                this.testDB.playAnimation("walk", 0);
             })
         })
     }

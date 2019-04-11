@@ -1,7 +1,7 @@
 
 if (!cc.runtime) {
     // runtime not support dragonbones.
-    
+
     var NORMAL_ANIMATION_GROUP = "normal";
     var AIM_ANIMATION_GROUP = "aim";
     var ATTACK_ANIMATION_GROUP = "attack";
@@ -13,83 +13,83 @@ if (!cc.runtime) {
     var WEAPON_L_LIST = ["weapon_1502b_l", "weapon_1005", "weapon_1005b", "weapon_1005c", "weapon_1005d"];
     var GROUND = -200;
     var G = -0.6;
-    
+
     cc.Class({
         extends: cc.Component,
         editor: {
             requireComponent: dragonBones.ArmatureDisplay
         },
-    
+
         properties: {
-            touchHandler : {
+            touchHandler: {
                 default: null,
                 type: cc.Node
             },
-    
+
             upButton: {
                 default: null,
                 type: cc.Node
             },
-    
+
             downButton: {
                 default: null,
                 type: cc.Node
             },
-    
+
             leftButton: {
                 default: null,
                 type: cc.Node
             },
-    
+
             rightButton: {
                 default: null,
                 type: cc.Node
             },
-    
-            _bullets : [],
-            _left : false,
-            _right : false,
-            _isJumpingA : false,
-            _isJumpingB : false,
-            _isSquating : false,
-            _isAttackingA : false,
-            _isAttackingB : false,
-            _weaponRIndex : 0,
-            _weaponLIndex : 0,
-            _faceDir : 1,
-            _aimDir : 0,
-            _moveDir : 0,
-            _aimRadian : 0,
-            _speedX : 0,
-            _speedY : 0,
-            _armature : null,
-            _armatureDisplay : null,
-            _weaponR : null,
-            _weaponL : null,
-            _aimState : null,
-            _walkState : null,
-            _attackState : null,
-            _target : cc.v2(0, 0),
+
+            _bullets: [],
+            _left: false,
+            _right: false,
+            _isJumpingA: false,
+            _isJumpingB: false,
+            _isSquating: false,
+            _isAttackingA: false,
+            _isAttackingB: false,
+            _weaponRIndex: 0,
+            _weaponLIndex: 0,
+            _faceDir: 1,
+            _aimDir: 0,
+            _moveDir: 0,
+            _aimRadian: 0,
+            _speedX: 0,
+            _speedY: 0,
+            _armature: null,
+            _armatureDisplay: null,
+            _weaponR: null,
+            _weaponL: null,
+            _aimState: null,
+            _walkState: null,
+            _attackState: null,
+            _target: cc.v2(0, 0),
         },
-    
+
         // use this for initialization
         onLoad: function () {
             this._armatureDisplay = this.getComponent(dragonBones.ArmatureDisplay);
             this._armature = this._armatureDisplay.armature();
-    
+
             this._armatureDisplay.addEventListener(dragonBones.EventObject.FADE_IN_COMPLETE, this._animationEventHandler, this);
             this._armatureDisplay.addEventListener(dragonBones.EventObject.FADE_OUT_COMPLETE, this._animationEventHandler, this);
-    
+
             this._armature.getSlot('effects_1').displayController = NORMAL_ANIMATION_GROUP;
             this._armature.getSlot('effects_2').displayController = NORMAL_ANIMATION_GROUP;
-    
+
             this._weaponR = this._armature.getSlot('weapon_r').childArmature;
             this._weaponL = this._armature.getSlot('weapon_l').childArmature;
             this._weaponR.addEventListener(dragonBones.EventObject.FRAME_EVENT, this._frameEventHandler, this);
             this._weaponL.addEventListener(dragonBones.EventObject.FRAME_EVENT, this._frameEventHandler, this);
-    
+
             this._updateAnimation();
-    
+
             if (this.touchHandler) {
                 // touch events
                 this.touchHandler.on(cc.Node.EventType.TOUCH_START, event => {
@@ -107,13 +107,13 @@ if (!cc.runtime) {
                     this.aim(touchLoc.x, touchLoc.y);
                 }, this);
             }
-    
+
             if (this.upButton) {
                 this.upButton.on(cc.Node.EventType.TOUCH_START, event => {
                     this.jump();
                 }, this);
             }
-    
+
             if (this.downButton) {
                 this.downButton.on(cc.Node.EventType.TOUCH_START, event => {
                     this.squat(true);
@@ -125,7 +125,7 @@ if (!cc.runtime) {
                     this.squat(false);
                 }, this);
             }
-    
+
             if (this.leftButton) {
                 this.leftButton.on(cc.Node.EventType.TOUCH_START, event => {
                     this._left = true;
@@ -140,7 +140,7 @@ if (!cc.runtime) {
                     this._updateMove(-1);
                 }, this);
             }
-    
+
             if (this.rightButton) {
                 this.rightButton.on(cc.Node.EventType.TOUCH_START, event => {
                     this._right = true;
@@ -155,7 +155,7 @@ if (!cc.runtime) {
                     this._updateMove(1);
                 }, this);
             }
-    
+
             // keyboard events
             cc.systemEvent.on(cc.SystemEvent.EventType.KEY_DOWN, function (event) {
                 this._keyHandler(event.keyCode, true);
@@ -164,9 +164,9 @@ if (!cc.runtime) {
                 this._keyHandler(event.keyCode, false);
             }, this);
         },
-    
-        _keyHandler: function(keyCode, isDown) {
-            switch(keyCode) {
+
+        _keyHandler: function (keyCode, isDown) {
+            switch (keyCode) {
                 case cc.macro.KEY.a:
                 case cc.macro.KEY.left:
                     this._left = isDown;
@@ -207,8 +207,8 @@ if (!cc.runtime) {
                     return;
             }
         },
-    
-        _updateMove : function (dir) {
+
+        _updateMove: function (dir) {
             if (this._left && this._right) {
                 this.move(dir);
             } else if (this._left) {
@@ -219,105 +219,102 @@ if (!cc.runtime) {
                 this.move(0);
             }
         },
-    
-        move : function(dir) {
+
+        move: function (dir) {
             if (this._moveDir === dir) {
                 return;
             }
-    
+
             this._moveDir = dir;
             this._updateAnimation();
         },
-    
-        jump : function () {
+
+        jump: function () {
             if (this._isJumpingA) {
                 return;
             }
-    
+
             this._isJumpingA = true;
             this._armature.animation.fadeIn("jump_1", -1, -1, 0, NORMAL_ANIMATION_GROUP);
             this._walkState = null;
         },
-    
-        squat : function(isSquating) {
+
+        squat: function (isSquating) {
             if (this._isSquating === isSquating) {
                 return;
             }
-    
+
             this._isSquating = isSquating;
             this._updateAnimation();
         },
-    
-        attack : function (isAttacking) {
+
+        attack: function (isAttacking) {
             if (this._isAttackingA == isAttacking) {
                 return;
             }
-    
+
             this._isAttackingA = isAttacking;
         },
-    
-        switchWeaponL : function() {
+
+        switchWeaponL: function () {
             this._weaponL.removeEventListener(dragonBones.EventObject.FRAME_EVENT, this._frameEventHandler, this);
-    
+
             this._weaponLIndex = (this._weaponLIndex + 1) % WEAPON_L_LIST.length;
             var newWeaponName = WEAPON_L_LIST[this._weaponLIndex];
             this._weaponL = this._armatureDisplay.buildArmature(newWeaponName);
             this._armature.getSlot('weapon_l').childArmature = this._weaponL.armature();
-    
+
             this._weaponL.addEventListener(dragonBones.EventObject.FRAME_EVENT, this._frameEventHandler, this);
         },
-    
-        switchWeaponR : function() {
+
+        switchWeaponR: function () {
             this._weaponR.removeEventListener(dragonBones.EventObject.FRAME_EVENT, this._frameEventHandler, this);
-    
+
             this._weaponRIndex = (this._weaponRIndex + 1) % WEAPON_R_LIST.length;
             var newWeaponName = WEAPON_R_LIST[this._weaponRIndex];
             this._weaponR = this._armatureDisplay.buildArmature(newWeaponName);
             this._armature.getSlot('weapon_r').childArmature = this._weaponR.armature();
-    
+
             this._weaponR.addEventListener(dragonBones.EventObject.FRAME_EVENT, this._frameEventHandler, this);
         },
-    
-        aim : function(x, y) {
+
+        aim: function (x, y) {
             if (this._aimDir === 0) {
                 this._aimDir = 10;
             }
-    
+
             this._target = this.node.parent.convertToNodeSpaceAR(cc.v2(x, y));
         },
-    
-        update : function (dt) {
+
+        update: function (dt) {
             this._updatePosition();
             this._updateAim();
             this._updateAttack();
             this._enterFrameHandler(dt);
         },
-    
-        onDisable : function() {
+
+        onDisable: function () {
             // clean the bullets
-            for (var i = this._bullets.length - 1; i >= 0; i--)
-            {
+            for (var i = this._bullets.length - 1; i >= 0; i--) {
                 var bullet = this._bullets[i];
                 bullet.enabled = false;
             }
             this._bullets = [];
         },
-    
-        addBullet : function(bullet) {
+
+        addBullet: function (bullet) {
             this._bullets.push(bullet);
         },
-    
-        _enterFrameHandler : function (dt) {
-            for (var i = this._bullets.length - 1; i >= 0; i--)
-            {
+
+        _enterFrameHandler: function (dt) {
+            for (var i = this._bullets.length - 1; i >= 0; i--) {
                 var bullet = this._bullets[i];
-                if (bullet.update())
-                {
+                if (bullet.update()) {
                     this._bullets.splice(i, 1);
                 }
             }
         },
-    
+
         _animationEventHandler: function (event) {
             if (event.type === dragonBones.EventObject.FADE_IN_COMPLETE) {
                 if (event.animationState.name === "jump_1") {
@@ -335,23 +332,23 @@ if (!cc.runtime) {
                 }
             }
         },
-    
-        _frameEventHandler : function (event) {
+
+        _frameEventHandler: function (event) {
             if (event.name === "onFire") {
                 var firePointBone = event.armature.getBone("firePoint");
                 var localPoint = cc.v2(firePointBone.global.x, -firePointBone.global.y);
-    
+
                 var display = event.armature.display;
                 var globalPoint = display.node.convertToWorldSpace(localPoint);
-    
+
                 this._fire(globalPoint);
             }
         },
-    
-        _fire : function (firePoint) {
+
+        _fire: function (firePoint) {
             firePoint.x += Math.random() * 2 - 1;
             firePoint.y += Math.random() * 2 - 1;
-    
+
             var armature = this._armatureDisplay.buildArmature("bullet_01");
             var effect = this._armatureDisplay.buildArmature("fireEffect_01");
             var radian = this._faceDir < 0 ? Math.PI - this._aimRadian : this._aimRadian;
@@ -359,19 +356,19 @@ if (!cc.runtime) {
             bullet.init(this.node.parent, armature, effect, radian + Math.random() * 0.02 - 0.01, 40, firePoint);
             this.addBullet(bullet);
         },
-    
-        _updateAnimation : function() {
+
+        _updateAnimation: function () {
             if (this._isJumpingA) {
                 return;
             }
-    
+
             if (this._isSquating) {
                 this._speedX = 0;
                 this._armature.animation.fadeIn("squat", -1, -1, 0, NORMAL_ANIMATION_GROUP);
                 this._walkState = null;
                 return;
             }
-    
+
             if (this._moveDir === 0) {
                 this._speedX = 0;
                 this._armature.animation.fadeIn("idle", -1, -1, 0, NORMAL_ANIMATION_GROUP);
@@ -380,13 +377,13 @@ if (!cc.runtime) {
                 if (!this._walkState) {
                     this._walkState = this._armature.animation.fadeIn("walk", -1, -1, 0, NORMAL_ANIMATION_GROUP);
                 }
-    
+
                 if (this._moveDir * this._faceDir > 0) {
                     this._walkState.timeScale = MAX_MOVE_SPEED_FRONT / NORMALIZE_MOVE_SPEED;
                 } else {
                     this._walkState.timeScale = -MAX_MOVE_SPEED_BACK / NORMALIZE_MOVE_SPEED;
                 }
-    
+
                 if (this._moveDir * this._faceDir > 0) {
                     this._speedX = MAX_MOVE_SPEED_FRONT * this._faceDir;
                 } else {
@@ -394,8 +391,8 @@ if (!cc.runtime) {
                 }
             }
         },
-    
-        _updatePosition : function() {
+
+        _updatePosition: function () {
             if (this._speedX !== 0) {
                 this.node.x += this._speedX;
                 var minX = -cc.visibleRect.width / 2;
@@ -406,14 +403,14 @@ if (!cc.runtime) {
                     this.node.x = maxX;
                 }
             }
-    
+
             if (this._speedY != 0) {
                 if (this._speedY > 5 && this._speedY + G <= 5) {
                     this._armature.animation.fadeIn("jump_3", -1, -1, 0, NORMAL_ANIMATION_GROUP);
                 }
-    
+
                 this._speedY += G;
-    
+
                 this.node.y += this._speedY;
                 if (this.node.y < GROUND) {
                     this.node.y = GROUND;
@@ -428,12 +425,12 @@ if (!cc.runtime) {
                 }
             }
         },
-    
-        _updateAim : function () {
+
+        _updateAim: function () {
             if (this._aimDir === 0) {
                 return;
             }
-    
+
             this._faceDir = this._target.x > this.node.x ? 1 : -1;
             if (this.node.scaleX * this._faceDir < 0) {
                 this.node.scaleX *= -1;
@@ -441,9 +438,9 @@ if (!cc.runtime) {
                     this._updateAnimation();
                 }
             }
-    
+
             var aimOffsetY = this._armature.getBone("chest").global.y * this.node.scaleY;
-    
+
             if (this._faceDir > 0) {
                 this._aimRadian = Math.atan2(-(this._target.y - this.node.y + aimOffsetY), this._target.x - this.node.x);
             } else {
@@ -452,17 +449,17 @@ if (!cc.runtime) {
                     this._aimRadian -= Math.PI * 2;
                 }
             }
-    
+
             let aimDir = 0;
             if (this._aimRadian > 0) {
                 aimDir = -1;
             } else {
                 aimDir = 1;
             }
-    
+
             if (this._aimDir != aimDir) {
                 this._aimDir = aimDir;
-    
+
                 // Animation mixing.
                 if (this._aimDir >= 0) {
                     this._aimState = this._armature.animation.fadeIn(
@@ -475,35 +472,35 @@ if (!cc.runtime) {
                         0, AIM_ANIMATION_GROUP, dragonBones.AnimationFadeOutMode.SameGroup
                     );
                 }
-    
+
                 // Add bone mask.
                 //_aimState.addBoneMask("pelvis");
             }
-    
+
             this._aimState.weight = Math.abs(this._aimRadian / Math.PI * 2);
-    
+
             //_armature.invalidUpdate("pelvis"); // Only update bone mask.
             this._armature.invalidUpdate();
         },
-    
-        _updateAttack : function() {
+
+        _updateAttack: function () {
             if (!this._isAttackingA || this._isAttackingB) {
                 return;
             }
-    
+
             this._isAttackingB = true;
-    
+
             // Animation mixing.
             this._attackState = this._armature.animation.fadeIn(
                 "attack_01", -1, -1,
                 0, ATTACK_ANIMATION_GROUP, dragonBones.AnimationFadeOutMode.SameGroup
             );
-    
+
             this._attackState.autoFadeOutTime = this._attackState.fadeTotalTime;
             this._attackState.addBoneMask("pelvis");
         },
 
-        onLoadDragonBone () {
+        onLoadDragonBone() {
             if (cc.find('Canvas/animNode')) {
                 cc.find('Canvas/animNode').destroy();
             }
@@ -513,17 +510,19 @@ if (!cc.runtime) {
                 animNode.parent = cc.find('Canvas');
                 var dragonDisplay = animNode.addComponent(dragonBones.ArmatureDisplay);
 
-                var image = 'http://127.0.0.1:5500/assets/resources/Monster/monsterbone001_0_tex.png';
-                var ske = 'http://127.0.0.1:5500/assets/resources/Monster/monsterbone001_0_ske.json';
-                var atlas = 'http://127.0.0.1:5500/assets/resources/Monster/monsterbone001_0_tex.json';
-                cc.loader.load(image, (error, texture) => {
-                    cc.loader.load({ url: atlas, type: 'txt' }, (error, atlasJson) => {
-                        cc.loader.load({ url: ske, type: 'txt' }, (error, dragonBonesJson) => {
+                var imageUrl = 'http://127.0.0.1:5500/assets/resources/Monster/monsterbone001_0_tex.png';
+                var skeUrl = 'http://127.0.0.1:5500/assets/resources/Monster/monsterbone001_0_ske.json';
+                var atlasUrl = 'http://127.0.0.1:5500/assets/resources/Monster/monsterbone001_0_tex.json';
+                cc.loader.load(imageUrl, (error, texture) => {
+                    cc.loader.load({ url: atlasUrl, type: 'txt' }, (error, atlasJson) => {
+                        cc.loader.load({ url: skeUrl, type: 'txt' }, (error, dragonBonesJson) => {
                             var atlas = new dragonBones.DragonBonesAtlasAsset();
+                            atlas._uuid = atlasUrl;
                             atlas.atlasJson = atlasJson;
                             atlas.texture = texture;
 
                             var asset = new dragonBones.DragonBonesAsset();
+                            asset._uuid = skeUrl;
                             asset.dragonBonesJson = dragonBonesJson;
 
                             dragonDisplay.dragonAtlasAsset = atlas;
@@ -537,30 +536,30 @@ if (!cc.runtime) {
             }
         }
     });
-    
-    
+
+
     var DragonBullet = cc.Class({
         name: 'DragonBullet',
-        _speedX : 0,
-        _speedY : 0,
-    
-        _armature : null,
-        _armatureDisplay : null,
-        _effect : null,
-    
-        init : function (parentNode, armature, effect, radian, speed, position) {
+        _speedX: 0,
+        _speedY: 0,
+
+        _armature: null,
+        _armatureDisplay: null,
+        _effect: null,
+
+        init: function (parentNode, armature, effect, radian, speed, position) {
             this._speedX = Math.cos(radian) * speed;
             this._speedY = -Math.sin(radian) * speed;
             var thePos = parentNode.convertToNodeSpaceAR(position);
-    
+
             armature.playAnimation("idle");
-            
+
             let armatureNode = armature.node;
             armatureNode.setPosition(thePos);
             armatureNode.rotation = radian * cc.macro.DEG;
-    
+
             this._armature = armature;
-            
+
             if (effect) {
                 this._effect = effect;
                 var effectDisplay = this._effect.node;
@@ -571,21 +570,21 @@ if (!cc.runtime) {
                 if (Math.random() < 0.5) {
                     effectDisplay.scaleY *= -1;
                 }
-    
+
                 this._effect.playAnimation("idle");
-    
+
                 parentNode.addChild(effectDisplay);
             }
-    
+
             parentNode.addChild(armatureNode);
         },
-    
-        update : function() {
+
+        update: function () {
             let armatureNode = this._armature.node;
-    
+
             armatureNode.x += this._speedX;
             armatureNode.y += this._speedY;
-    
+
             var worldPos = armatureNode.parent.convertToWorldSpaceAR(armatureNode.getPosition());
             if (
                 worldPos.x < -100 || worldPos.x >= cc.visibleRect.width + 100 ||
@@ -594,21 +593,20 @@ if (!cc.runtime) {
                 this.doClean();
                 return true;
             }
-    
+
             return false;
         },
-    
-        onDisable : function () {
+
+        onDisable: function () {
             this.doClean();
         },
-    
-        doClean : function() {
+
+        doClean: function () {
             this._armature.node.removeFromParent();
-    
+
             if (this._effect) {
                 this._effect.node.removeFromParent();
             }
         },
     });
-    } // end of !cc.runtime
-    
+} // end of !cc.runtime
