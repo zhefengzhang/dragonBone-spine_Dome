@@ -77,12 +77,12 @@ export default class NewClass extends cc.Component {
         }
         var offsetX = this.node.convertToNodeSpaceAR(touchLoc).x;
         if (this.targetNode && cc.isValid(this.targetNode)) 
-            this.targetNode.getComponent("DragonBonesFight").moveControl(offsetX, true);
+            cc.find("Canvas").getComponent("DragonBonesFight").moveControl(offsetX, true);
     }
 
     onTouchEnd () {
         this.myJoystickPoint.position = cc.v3(0, 0, 0);
-        this.targetNode.getComponent("DragonBonesFight").moveControl(0, false);
+        cc.find("Canvas").getComponent("DragonBonesFight").moveControl(0, false);
     }
 
     getDirection () {
