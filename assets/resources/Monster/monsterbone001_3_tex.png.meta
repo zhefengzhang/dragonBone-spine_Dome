@@ -1,13 +1,18 @@
 {
-  "ver": "2.2.0",
+  "ver": "2.3.4",
   "uuid": "10f8fb1c-034a-47ab-91d8-173ae60bbb9a",
   "type": "sprite",
   "wrapMode": "clamp",
   "filterMode": "bilinear",
   "premultiplyAlpha": false,
+  "genMipmaps": false,
+  "packable": true,
+  "width": 256,
+  "height": 256,
+  "platformSettings": {},
   "subMetas": {
     "monsterbone001_3_tex": {
-      "ver": "1.0.3",
+      "ver": "1.0.4",
       "uuid": "900debce-5dd4-4a06-a977-15d37f614d37",
       "rawTextureUuid": "10f8fb1c-034a-47ab-91d8-173ae60bbb9a",
       "trimType": "auto",
