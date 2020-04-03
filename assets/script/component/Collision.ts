@@ -46,20 +46,50 @@ export default class NewClass extends cc.Component {
     }
 
     onCollisionEnter () {
-        console.log(this._collisionGroup);
+        var playerHitLabelNode = this._playerTarget.getChildByName("Infos").getChildByName("Label Hit");
+        var robotHitLabelNode = this._robotTarget.getChildByName("Infos").getChildByName("Label Hit");
         switch (this._collisionGroup) {
             case cc.game.groupList[1]:
-                if (this._playerHp.fillRange <= 0) return;
-                this._playerHp.fillRange -= 0.1;
+                if (this._playerHp.fillRange < 0.1) {
+                    cc.find("Canvas").emit("hero_dead");
+                }
+                else {
+                    this._playerHp.fillRange -= 0.1;
+                    cc.tween(playerHitLabelNode)
+                        .set({opacity: 255})
+                        .to(0.5, {opacity: 0})
+                        .start()
+                }
                 break;
             case cc.game.groupList[2]:
-                if (this._robotHp.fillRange <= 0) return;
+                if (this._robotHp.fillRange < 0.1) {
+                    var robotInfos = this._robotTarget.getChildByName("Infos");
+                    var robotMessage = robotInfos.getChildByName("Label Message");
+                    var robotMessageLabel = robotMessage.getComponent(cc.Label);
+                    robotMessageLabel.string = "有本事别跑~";
+                    cc.tween(robotMessage)
+                        .to(1, {opacity: 255})
+                        .call(()=>{
+                            cc.tween(robotMessage)
+                                .to(1, {opacity: 0})
+                                .start();
+                        })
+                        .start();
+                }
                 this._robotHp.fillRange -= 0.1;
                 setTimeout(()=>{
                     if (this._attack) this._attack.playWarp(null, "warp_0", this._robotDBones);
-                }, 200)
+                }, 200);
+                cc.find("Canvas").getComponent("DragonBonesFight")._robotAutoMove = false;
+                if (this._robotHp.fillRange >= 0) {
+                    cc.tween(robotHitLabelNode)
+                        .set({opacity: 255})
+                        .to(0.5, {opacity: 0})
+                        .start()
+                }
                 break;
         }
+        cc.find("Canvas").getComponent("AudioManager").playEffectSound("attack_0", false);
     }
 
     onCollisionExit () {
