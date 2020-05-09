@@ -2,6 +2,7 @@
   "android-instant": {
     "REMOTE_SERVER_ROOT": "",
     "host": "",
+    "packageName": "org.cocos2d.dragonBone-spine_Dome",
     "pathPattern": "",
     "recordPath": "",
     "scheme": "https",
@@ -10,11 +11,7 @@
   "appKey": "",
   "appSecret": "",
   "encryptJs": true,
-  "excludeScenes": [
-    "fdc85b83-efd8-4647-be75-697b0b616e0a",
-    "cd67e9f0-cc2c-4fa5-a366-13e7bd5bc121",
-    "582767b7-f1b9-498a-94a4-836c11ff448a"
-  ],
+  "excludeScenes": [],
   "fb-instant-games": {},
   "includeAnySDK": false,
   "includeSDKBox": false,
@@ -38,7 +35,7 @@
     "orientation": "portrait",
     "zip": false
   },
-  "startScene": "07fee117-cb9e-4ac1-b846-511fb1484ca4",
+  "startScene": "9765c0f6-6b3c-4e71-b940-a21ceaecc308",
   "title": "dragonBone-spine_Dome",
   "webOrientation": "auto",
   "wechatgame": {
@@ -48,5 +45,16 @@
     "subContext": ""
   },
   "xxteaKey": "17e88642-dbe3-48",
-  "zipCompressJs": true
+  "zipCompressJs": true,
+  "android": {
+    "packageName": "org.cocos2d.demo"
+  },
+  "ios": {
+    "packageName": "org.cocos2d.demo"
+  },
+  "mac": {
+    "packageName": "org.cocos2d.demo"
+  },
+  "win32": {},
+  "appBundle": false
 }
