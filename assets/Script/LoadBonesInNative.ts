@@ -32,8 +32,7 @@ export default class NewClass extends cc.Component {
     _dragonbonesJsonDownloadTask: any;
     _dragonbonesTextureDownloadTask: any;
     _dragonbonesAtlasDownloadTask: any;
-
-    _atlasTask: any;
+    
     _storagePath: string;
     _inited: any;
 
