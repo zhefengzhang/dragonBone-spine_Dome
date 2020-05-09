@@ -130,7 +130,6 @@ export default class NewClass extends cc.Component {
                     asset.textureNames = ['raptor.png'];
                     skeleton.skeletonData = asset;
                     skeleton.animation = 'walk';
-                    skeleton._updateSkeletonData();
                 });
             });
         });
